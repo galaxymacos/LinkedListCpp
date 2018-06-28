@@ -4,28 +4,28 @@ using namespace std;
 
 class MyLinkedList {
 public:
-    class Node {
+    class ListNode {
     public:
         int val;
-        Node *next{};
+        ListNode *next{};
 
-        Node(int val) : val(val) {}
+        explicit ListNode(int val) : val(val) {}
     };
 private:
     int length = 0;
-    Node *head{};
-    Node *tail{};
+    ListNode *head{};
+    ListNode *tail{};
 public:
 
 
     /** Initialize your data structure here. */
-    MyLinkedList(){};
+    MyLinkedList()=default;
 
     /** Get the value of the index-th node in the linked list. If the index is invalid, return -1. */
     int get(int index) {
         if(index>=length)
             return -1;
-        Node *headCopy = head;
+        ListNode *headCopy = head;
         while (index > 0) {
             index--;
             headCopy = headCopy->next;
@@ -37,7 +37,7 @@ public:
 
     /** Add a node of value val before the first element of the linked list. After the insertion, the new node will be the first node of the linked list. */
     void addAtHead(int val) {
-        auto *newNode = new Node(val);
+        auto *newNode = new ListNode(val);
         length++;
         if(head == nullptr&&tail==nullptr){
             head = newNode;
@@ -52,7 +52,7 @@ public:
 
     /** Append a node of value val to the last element of the linked list. */
     void addAtTail(int val) {
-        auto *newNode = new Node(val);
+        auto *newNode = new ListNode(val);
         length++;
         if(head == nullptr&&tail==nullptr){
             head = newNode;
@@ -69,7 +69,7 @@ public:
     void addAtIndex(int index, int val) {
         if(index>length)
             return;
-        Node *headCopy = head;
+        ListNode *headCopy = head;
         if(index == 0)
             addAtHead(val);
         else if(index == length)
@@ -82,8 +82,8 @@ public:
                 if(headCopy ==nullptr)
                     return;
             }
-            Node *nextNode = headCopy->next;
-            headCopy->next = new Node(val);
+            ListNode *nextNode = headCopy->next;
+            headCopy->next = new ListNode(val);
             headCopy->next->next = nextNode;
             length++;
         }
@@ -95,8 +95,8 @@ public:
         if(index<0||index>=length){
             return;
         }
-        Node *headCopy = head;
-        Node *nextNode = head->next;
+        ListNode *headCopy = head;
+        ListNode *nextNode = head->next;
         if(index == 0){
             head = head->next;
             length--;
@@ -115,7 +115,7 @@ public:
             headCopy = headCopy->next;
             index--;
         }
-        Node *nextNextNode = headCopy->next->next;
+        ListNode *nextNextNode = headCopy->next->next;
         headCopy->next = nextNextNode;
         length--;
     }
@@ -129,28 +129,25 @@ public:
 
         cout<<endl;
     }
+
+    bool hasCycle(ListNode *head) {
+        if(head== nullptr)
+            return false;
+        ListNode* quickPointer = head;
+        ListNode* slowPointer = head;
+        do{
+            slowPointer=slowPointer->next;
+            if(slowPointer== nullptr||quickPointer->next==nullptr||quickPointer->next->next== nullptr)
+                return false;
+            quickPointer=quickPointer->next->next;
+
+        }while(slowPointer!=quickPointer);
+        return true;
+    }
 };
 
 int main(){
-    MyLinkedList list;
-    list.addAtHead(8);
-    list.addAtTail(81);
-    list.deleteAtIndex(2);
-    list.addAtHead(26);
-    list.print();
-    list.deleteAtIndex(2);
-    list.print();   // 26 8
 
-    list.addAtTail(24);
-    list.print();
-    list.addAtHead(15);
-    list.addAtTail(0);
-    list.addAtTail(13);
-    list.addAtTail(1);
-
-    list.addAtIndex(6,33);
-    list.print();
-    cout<<list.get(6)<<endl;
 
 }
 
